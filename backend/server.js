@@ -18,7 +18,8 @@ const errorHandlerMiddleware = require("./configs/middleware/error-handler");
 
 const authRouter = require("./core/routes/user/authRoutes");
 const userRouter = require("./core/routes/user/userRoutes");
-const animaliaFamilyRouter = require("./core/routes/eukaryota/familyRoutes");
+const animaliaFamilyRouter = require("./core/routes/animalia/familyRoutes");
+const canidaeRouter = require("./core/routes/animalia/canidaeRoutes");
 //
 app.use(morgan("dev"));
 app.use(express.json());
@@ -33,7 +34,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/animaliaFamily", animaliaFamilyRouter);
+app.use("/api/v1/animalia/animaliaFamily", animaliaFamilyRouter);
+app.use("/api/v1/animalia/canidae", canidaeRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
