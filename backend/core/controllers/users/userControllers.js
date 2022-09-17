@@ -95,6 +95,10 @@ const deleteUser = async (req, res) => {
 
   checkPermissions(req.user, userExists._id);
 
+  if (userExists.publicImageId) {
+    await cloudinaryRemoveLastUserImage(userExists.publicImageId);
+  }
+
   const user = await User.findOneAndDelete({ _id: userId });
   res.cookie("token", "logout", {
     httpOnly: true,
@@ -111,16 +115,19 @@ const profileImageUser = async (req, res) => {
     id: userId,
     width: 350,
     heigth: 260,
+    savePath: `tmp/${userId}.jpg`,
   });
 
   const localPath = `tmp/${userId}.jpg`;
   const data = await cloudinaryUpload({
     file: localPath,
-    path: `veterinary/user/${userId}/profileImage/`,
+    savePath: `veterinary/user/${userId}/profileImage/`,
   });
 
   const findUser = await User.findOne({ _id: userId });
-  await cloudinaryRemoveLastUserImage(findUser.publicImageId);
+  if (findUser.publicImageId) {
+    await cloudinaryRemoveLastUserImage(findUser.publicImageId);
+  }
 
   const user = await User.findOneAndUpdate(
     { _id: userId },

@@ -4,22 +4,22 @@ const path = require("path");
 
 const resizeImage = async ({
   file: imageFile,
-  id: id,
   width: width,
   heigth: heigth,
+  savePath: savePath,
 }) => {
   await sharp(imageFile)
     .resize(width, heigth)
     .toFormat("jpeg")
     .jpeg({ quality: 90 })
-    .toFile(path.join(`tmp/${id}.jpg`));
+    .toFile(path.join(savePath));
 };
 
-const cloudinaryUpload = async ({ file: fileToUpload, path: path }) => {
+const cloudinaryUpload = async ({ file: fileToUpload, savePath: savePath }) => {
   try {
     const data = await cloudinary.uploader.upload(fileToUpload, {
       use_filename: true,
-      folder: path,
+      folder: savePath,
     });
     return {
       url: data?.secure_url,
